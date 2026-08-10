@@ -15,6 +15,8 @@ import IncomeTransactionsList from './pages/Income/IncomeTransactionsList';
 import IncomeTransactionForm from './pages/Income/IncomeTransactionForm';
 import ExpenseTransactionsList from './pages/Expenses/ExpenseTransactionsList';
 import ExpenseTransactionForm from './pages/Expenses/ExpenseTransactionForm';
+import GoalsList from './pages/Goals/GoalsList';
+import GoalForm from './pages/Goals/GoalForm';
 
 export default function App() {
   return (
@@ -41,7 +43,9 @@ export default function App() {
               <Route path="/expenses" element={<ExpenseTransactionsList />} />
               <Route path="/expenses/new" element={<ExpenseTransactionForm />} />
               <Route path="/expenses/:id" element={<ExpenseTransactionForm />} />
-              <Route path="/goals" element={<ComingSoon title="יעדים" />} />
+              <Route path="/goals" element={<GoalsList />} />
+              <Route path="/goals/new" element={<GoalForm />} />
+              <Route path="/goals/:id" element={<GoalForm />} />
               <Route path="/audit-log" element={<ComingSoon title="יומן שינויים" />} />
             </Route>
           </Route>
