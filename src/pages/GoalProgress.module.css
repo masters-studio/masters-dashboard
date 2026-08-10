@@ -1,0 +1,32 @@
+.section {
+  margin-top: 36px;
+}
+
+.sectionTitle {
+  font-family: var(--ff-head);
+  font-weight: 800;
+  font-size: 15px;
+  margin-bottom: 12px;
+  color: var(--pearl);
+}
+
+.centerGroup {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+
+.centerName {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--pearl);
+  margin-bottom: 16px;
+}
+
+.donutRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+}

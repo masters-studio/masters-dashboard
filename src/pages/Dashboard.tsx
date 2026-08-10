@@ -10,6 +10,7 @@ import { listProfitCenters, type SimpleLookup } from '../api/lookups';
 import { translateApiError } from '../api/errorMessages';
 import { HEBREW_MONTHS } from '../constants/hebrewMonths';
 import { DataTable, type Column } from '../components/DataTable';
+import GoalProgress from './GoalProgress';
 import domainStyles from '../styles/domainScreen.module.css';
 import styles from './Dashboard.module.css';
 
@@ -269,6 +270,8 @@ export default function Dashboard() {
               emptyMessage="אין עובדים עם הכנסות בתקופה שנבחרה"
             />
           </div>
+
+          <GoalProgress month={month} year={year} profitCenters={profitCenters} />
         </>
       ) : null}
     </div>
