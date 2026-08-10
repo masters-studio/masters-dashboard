@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
-import { ApiError } from '../api/client';
+import { translateApiError } from '../api/errorMessages';
 import styles from './Login.module.css';
 
 export default function LoginPage() {
@@ -18,12 +18,18 @@ export default function LoginPage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
+
+    if (!username.trim() || !password) {
+      setError('נא למלא שם משתמש וסיסמה');
+      return;
+    }
+
     setSubmitting(true);
     try {
       await login(username, password);
       navigate(from, { replace: true });
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'שגיאה בהתחברות. נסו שוב.');
+      setError(translateApiError(err));
     } finally {
       setSubmitting(false);
     }
@@ -37,7 +43,11 @@ export default function LoginPage() {
           התחברות<span className="dot" />
         </h1>
         {error && <p className={styles.error}>{error}</p>}
-        <form onSubmit={handleSubmit}>
+        {/* noValidate: we show our own Hebrew validation messages above —
+            the browser's native "please fill out this field" tooltip
+            renders in the OS/browser locale, not ours. Same convention
+            every future form in this app should follow. */}
+        <form onSubmit={handleSubmit} noValidate>
           <label className={styles.field}>
             שם משתמש
             <input
@@ -45,7 +55,6 @@ export default function LoginPage() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               autoComplete="username"
-              required
               autoFocus
             />
           </label>
@@ -56,7 +65,6 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"
-              required
             />
           </label>
           <button type="submit" className={`btn btn-primary ${styles.submit}`} disabled={submitting}>
