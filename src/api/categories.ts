@@ -46,3 +46,38 @@ export function topLevelOf(categories: Category[]): Category[] {
 export function childrenOf(categories: Category[], parentId: number): Category[] {
   return categories.filter((c) => c.parentCategoryId === parentId);
 }
+
+/**
+ * Mirrors CategoryRequest.java exactly — shared shape for create (POST) and
+ * update (PUT). CategoryService.resolveParent() enforces (not this shape):
+ * a parent must itself be top-level, and must share both type and
+ * profitCenterId with the child — CategoryForm.tsx mirrors that rule
+ * client-side by only ever offering matching top-level categories as parent
+ * options.
+ */
+export interface CategoryRequest {
+  type: CategoryType;
+  profitCenterId: number;
+  parentCategoryId: number | null;
+  name: string;
+  budget: number | null;
+  employeeRequired: boolean | null;
+  active: boolean | null;
+}
+
+export function getCategory(id: number): Promise<Category> {
+  return apiFetch<Category>(`/categories/${id}`);
+}
+
+export function createCategory(request: CategoryRequest): Promise<Category> {
+  return apiFetch<Category>('/categories', { method: 'POST', body: request });
+}
+
+export function updateCategory(id: number, request: CategoryRequest): Promise<Category> {
+  return apiFetch<Category>(`/categories/${id}`, { method: 'PUT', body: request });
+}
+
+/** Soft-deactivate (sets active=false) — not a real delete, see CategoryController. */
+export function deactivateCategory(id: number): Promise<void> {
+  return apiFetch<void>(`/categories/${id}`, { method: 'DELETE' });
+}

@@ -1,0 +1,73 @@
+/* Tree-specific styles only — header/filters/badge/form primitives come from
+   ../../styles/domainScreen.module.css, same as every other domain screen.
+   Categories get a dedicated tree view (not DataTable) because the
+   parent/child relationship is the whole point of this screen, unlike
+   Employees/Suppliers where rows are independent. */
+
+.typeToggle {
+  display: flex;
+  gap: 8px;
+}
+
+.tree {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow-x: auto;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 140px 160px 110px auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  min-width: 720px;
+}
+
+.tree > div:last-child > .row:last-child {
+  border-bottom: none;
+}
+
+.rowChild {
+  background: var(--black-2);
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nameChild {
+  padding-inline-start: 28px;
+  color: var(--pearl-muted);
+  font-size: 14px;
+}
+
+.nameChild::before {
+  content: '\21b3'; /* ↳ */
+  color: var(--pearl-faint);
+  margin-inline-end: 4px;
+}
+
+.budget {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.employeeRequired {
+  font-size: 12.5px;
+  color: var(--pearl-faint);
+}
+
+.status {
+  display: flex;
+}
+
+.emptyGroup {
+  padding: 32px 18px;
+  text-align: center;
+  color: var(--pearl-faint);
+}
