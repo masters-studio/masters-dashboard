@@ -4,13 +4,13 @@ import styles from './Layout.module.css';
 
 const NAV_ITEMS = [
   { to: '/', label: 'דשבורד', end: true },
-  { to: '/employees', label: 'עובדים' },
-  { to: '/suppliers', label: 'ספקים' },
-  { to: '/categories', label: 'קטגוריות' },
-  { to: '/income', label: 'הכנסות' },
-  { to: '/expenses', label: 'הוצאות' },
-  { to: '/goals', label: 'יעדים' },
-  { to: '/audit-log', label: 'יומן שינויים' },
+  { to: '/employees', label: 'עובדים', end: false },
+  { to: '/suppliers', label: 'ספקים', end: false },
+  { to: '/categories', label: 'קטגוריות', end: false },
+  { to: '/income', label: 'הכנסות', end: false },
+  { to: '/expenses', label: 'הוצאות', end: false },
+  { to: '/goals', label: 'יעדים', end: false },
+  { to: '/audit-log', label: 'יומן שינויים', end: false },
 ] as const;
 
 /** Wraps every protected route — sidebar nav, logo, user/logout, then the page itself via <Outlet>. */
