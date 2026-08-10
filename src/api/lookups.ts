@@ -85,3 +85,14 @@ export function listCompensationModels(includeInactive = false): Promise<Compens
 export function listCalculationBases(): Promise<CalculationBasisLookup[]> {
   return apiFetch<CalculationBasisLookup[]>('/lookups/calculation-bases');
 }
+
+/** No active flag — services has exactly two fixed rows, see ServiceDto.java. */
+export interface ServiceLookup {
+  id: number;
+  name: string;
+}
+
+/** No includeInactive param — services has no active column to filter on. */
+export function listServices(): Promise<ServiceLookup[]> {
+  return apiFetch<ServiceLookup[]>('/lookups/services');
+}

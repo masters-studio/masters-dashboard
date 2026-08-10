@@ -168,9 +168,14 @@ export default function IncomeTransactionsList() {
         <h1>
           הכנסות<span className="dot" />
         </h1>
-        <button type="button" className="btn btn-primary" onClick={() => navigate('/income/new')}>
-          עסקת הכנסה חדשה
-        </button>
+        <div className={styles.headerActions}>
+          <button type="button" className="btn btn-ghost" onClick={() => navigate('/income/quick-entry')}>
+            הזנה מהירה
+          </button>
+          <button type="button" className="btn btn-primary" onClick={() => navigate('/income/new')}>
+            עסקת הכנסה חדשה
+          </button>
+        </div>
       </div>
 
       {error && <p className={styles.pageError}>{error}</p>}

@@ -13,6 +13,7 @@ import {
   type SimpleLookup,
 } from '../../api/lookups';
 import { translateApiError } from '../../api/errorMessages';
+import EmployeeServicePricesEditor from './EmployeeServicePricesEditor';
 import styles from '../../styles/domainScreen.module.css';
 
 interface FormState {
@@ -131,6 +132,14 @@ export default function EmployeeForm() {
   const isPercentageModel = selectedModel?.code === 'PERCENTAGE';
   const isFixedModel = selectedModel?.code === 'FIXED_SALARY' || selectedModel?.code === 'FIXED_AMOUNT';
   const isRentalModel = selectedModel?.code === 'FIXED_AMOUNT';
+  const selectedProfitCenter = useMemo(
+    () => profitCenters.find((c) => String(c.id) === form.profitCenterId),
+    [profitCenters, form.profitCenterId],
+  );
+  // The service price list only makes sense for מספרה — services/prices are
+  // barber-service specific, and don't exist as a concept for the other
+  // profit centres.
+  const showServicePrices = isEdit && selectedProfitCenter?.name === 'מספרה';
 
   function set<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -422,6 +431,8 @@ export default function EmployeeForm() {
           </div>
         </form>
       </div>
+
+      {showServicePrices && <EmployeeServicePricesEditor employeeId={Number(id)} />}
     </div>
   );
 }

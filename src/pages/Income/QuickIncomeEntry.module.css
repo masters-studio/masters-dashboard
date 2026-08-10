@@ -1,0 +1,56 @@
+.lines {
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.linesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-weight: 700;
+  color: var(--pearl);
+}
+
+.lineRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--surface-2);
+  border-radius: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.lineRow select {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 7px 10px;
+  color: var(--pearl);
+}
+
+.countInput {
+  width: 70px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 7px 10px;
+  color: var(--pearl);
+}
+
+.lineNote {
+  color: var(--pearl-muted);
+  font-size: 14px;
+  flex: 1;
+}
+
+.total {
+  text-align: end;
+  font-weight: 700;
+  color: var(--pearl);
+  margin-top: 8px;
+  font-size: 16px;
+}
