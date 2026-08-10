@@ -4,7 +4,8 @@ import { createGoal, getGoal, updateGoal, type GoalRequest } from '../../api/goa
 import { listProfitCenters, type SimpleLookup } from '../../api/lookups';
 import { translateApiError } from '../../api/errorMessages';
 import styles from '../../styles/domainScreen.module.css';
-import { GOAL_TYPE_SUGGESTIONS, HEBREW_MONTHS } from './goalConstants';
+import { GOAL_TYPE_SUGGESTIONS } from './goalConstants';
+import { HEBREW_MONTHS } from '../../constants/hebrewMonths';
 
 interface FormState {
   month: string;

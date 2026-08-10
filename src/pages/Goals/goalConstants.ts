@@ -1,20 +1,5 @@
 /** Shared between GoalsList and GoalForm. */
 
-export const HEBREW_MONTHS = [
-  'ינואר',
-  'פברואר',
-  'מרץ',
-  'אפריל',
-  'מאי',
-  'יוני',
-  'יולי',
-  'אוגוסט',
-  'ספטמבר',
-  'אוקטובר',
-  'נובמבר',
-  'דצמבר',
-] as const;
-
 /**
  * The four conventional goalType values from the source spreadsheet's own
  * goal-tracking sheet — see GoalRequest.java's javadoc. goalType is plain

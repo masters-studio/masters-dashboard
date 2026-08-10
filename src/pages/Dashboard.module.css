@@ -1,0 +1,87 @@
+.periodBar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.periodBar select,
+.periodBar input {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 9px 12px;
+  color: var(--pearl);
+  font-size: 14px;
+}
+
+.periodBar input[type='number'] {
+  width: 90px;
+}
+
+/* ---------------- KPI headline cards ---------------- */
+
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.kpiCard {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 22px 24px;
+}
+
+.kpiLabel {
+  font-size: 13px;
+  color: var(--pearl-faint);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.kpiValue {
+  font-family: var(--ff-display);
+  font-size: 34px;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+}
+
+.kpiValuePositive {
+  color: var(--success);
+}
+
+.kpiValueNegative {
+  color: var(--danger);
+}
+
+.kpiSub {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--pearl-muted);
+}
+
+/* ---------------- detail breakdown sections ---------------- */
+
+.sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.sectionTitle {
+  font-family: var(--ff-head);
+  font-weight: 800;
+  font-size: 15px;
+  margin-bottom: 12px;
+  color: var(--pearl);
+}
+
+.emptyNotice {
+  color: var(--pearl-faint);
+  font-size: 14px;
+  margin-bottom: 20px;
+}

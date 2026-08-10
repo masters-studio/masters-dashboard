@@ -5,7 +5,8 @@ import { listProfitCenters, type SimpleLookup } from '../../api/lookups';
 import { translateApiError } from '../../api/errorMessages';
 import { DataTable, type Column } from '../../components/DataTable';
 import styles from '../../styles/domainScreen.module.css';
-import { GOAL_TYPE_SUGGESTIONS, HEBREW_MONTHS } from './goalConstants';
+import { GOAL_TYPE_SUGGESTIONS } from './goalConstants';
+import { HEBREW_MONTHS } from '../../constants/hebrewMonths';
 
 function formatCurrency(amount: number): string {
   return `₪${amount.toLocaleString('he-IL')}`;
