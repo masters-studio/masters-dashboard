@@ -16,6 +16,10 @@ export interface Employee {
   fixedAmount: number | null;
   calculationBasisId: number | null;
   settlementTypeId: number | null;
+  /** Required iff compensationModelId is FIXED_AMOUNT ("renter") — day of
+   *  month ChairRentalIncomeScheduler bills their rent on. Forbidden for
+   *  every other compensation model. */
+  rentalDayOfMonth: number | null;
   active: boolean;
   notes: string | null;
   createdAt: string;
@@ -40,6 +44,7 @@ export interface EmployeeRequest {
   fixedAmount: number | null;
   calculationBasisId: number | null;
   settlementTypeId: number | null;
+  rentalDayOfMonth: number | null;
   active: boolean | null;
   notes: string | null;
 }

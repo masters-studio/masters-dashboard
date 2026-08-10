@@ -82,7 +82,11 @@ export default function EmployeesList() {
       return `${(employee.compensationPercentage * 100).toFixed(0)}%`;
     }
     if (employee.fixedAmount != null) {
-      return `₪${employee.fixedAmount.toLocaleString('he-IL')}`;
+      const amount = `₪${employee.fixedAmount.toLocaleString('he-IL')}`;
+      if (model.code === 'FIXED_AMOUNT' && employee.rentalDayOfMonth != null) {
+        return `${amount} (יום ${employee.rentalDayOfMonth} בחודש)`;
+      }
+      return amount;
     }
     return '—';
   }

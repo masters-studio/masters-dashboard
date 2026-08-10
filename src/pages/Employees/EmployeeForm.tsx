@@ -27,6 +27,9 @@ interface FormState {
   fixedAmount: string;
   calculationBasisId: string;
   settlementTypeId: string;
+  /** Day of month (1-31), FIXED_AMOUNT ("renter") only — ChairRentalIncomeScheduler
+   *  bills their rent on this day every month. */
+  rentalDayOfMonth: string;
   active: boolean;
   notes: string;
 }
@@ -41,6 +44,7 @@ const EMPTY_FORM: FormState = {
   fixedAmount: '',
   calculationBasisId: '',
   settlementTypeId: '',
+  rentalDayOfMonth: '',
   active: true,
   notes: '',
 };
@@ -50,8 +54,11 @@ const EMPTY_FORM: FormState = {
  * replicates EmployeeService.validateCompensation()'s rule client-side:
  * PERCENTAGE needs compensationPercentage + calculationBasisId (forbids
  * fixedAmount); FIXED_SALARY/FIXED_AMOUNT need fixedAmount (forbid
- * percentage + calculationBasis). The backend still enforces the same rule —
- * this is UX, not the source of truth.
+ * percentage + calculationBasis); FIXED_AMOUNT additionally needs
+ * rentalDayOfMonth (a "renter" who pays chair rent, auto-billed by
+ * ChairRentalIncomeScheduler on that day every month) — forbidden for every
+ * other model, including FIXED_SALARY. The backend still enforces the same
+ * rule — this is UX, not the source of truth.
  */
 export default function EmployeeForm() {
   const { id } = useParams();
@@ -107,6 +114,8 @@ export default function EmployeeForm() {
           calculationBasisId:
             employee.calculationBasisId != null ? String(employee.calculationBasisId) : '',
           settlementTypeId: employee.settlementTypeId != null ? String(employee.settlementTypeId) : '',
+          rentalDayOfMonth:
+            employee.rentalDayOfMonth != null ? String(employee.rentalDayOfMonth) : '',
           active: employee.active,
           notes: employee.notes ?? '',
         });
@@ -121,6 +130,7 @@ export default function EmployeeForm() {
   );
   const isPercentageModel = selectedModel?.code === 'PERCENTAGE';
   const isFixedModel = selectedModel?.code === 'FIXED_SALARY' || selectedModel?.code === 'FIXED_AMOUNT';
+  const isRentalModel = selectedModel?.code === 'FIXED_AMOUNT';
 
   function set<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -149,6 +159,12 @@ export default function EmployeeForm() {
       if (!form.fixedAmount || Number.isNaN(amt) || amt <= 0) {
         errors.fixedAmount = 'יש להזין סכום תקין גדול מ-0';
       }
+      if (isRentalModel) {
+        const day = Number(form.rentalDayOfMonth);
+        if (!form.rentalDayOfMonth || !Number.isInteger(day) || day < 1 || day > 31) {
+          errors.rentalDayOfMonth = 'יש להזין יום בחודש בין 1 ל-31';
+        }
+      }
     }
 
     if (form.notes.length > 500) errors.notes = 'הערות ארוכות מדי (עד 500 תווים)';
@@ -173,6 +189,7 @@ export default function EmployeeForm() {
       fixedAmount: isFixedModel ? Number(form.fixedAmount) : null,
       calculationBasisId: isPercentageModel ? Number(form.calculationBasisId) : null,
       settlementTypeId: form.settlementTypeId ? Number(form.settlementTypeId) : null,
+      rentalDayOfMonth: isRentalModel ? Number(form.rentalDayOfMonth) : null,
       active: form.active,
       notes: form.notes.trim() || null,
     };
@@ -275,6 +292,7 @@ export default function EmployeeForm() {
                   set('compensationPercentage', '');
                   set('fixedAmount', '');
                   set('calculationBasisId', '');
+                  set('rentalDayOfMonth', '');
                 }}
               >
                 <option value="">בחר/י…</option>
@@ -353,6 +371,27 @@ export default function EmployeeForm() {
                 />
                 {fieldErrors.fixedAmount && (
                   <span className={styles.fieldError}>{fieldErrors.fixedAmount}</span>
+                )}
+              </label>
+            )}
+
+            {isRentalModel && (
+              <label className={styles.field}>
+                יום חיוב בחודש *
+                <input
+                  type="number"
+                  min="1"
+                  max="31"
+                  step="1"
+                  value={form.rentalDayOfMonth}
+                  onChange={(e) => set('rentalDayOfMonth', e.target.value)}
+                />
+                {fieldErrors.rentalDayOfMonth ? (
+                  <span className={styles.fieldError}>{fieldErrors.rentalDayOfMonth}</span>
+                ) : (
+                  <span className={styles.hint}>
+                    בכל חודש, ביום הזה, המערכת תרשום אוטומטית הכנסת שכירות כיסא עבור העובד/ת
+                  </span>
                 )}
               </label>
             )}
