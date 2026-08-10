@@ -50,3 +50,37 @@ export function getDashboardSummary(params: DashboardSummaryParams): Promise<Das
   if (params.profitCenterId != null) search.set('profitCenterId', String(params.profitCenterId));
   return apiFetch<DashboardSummary>(`/dashboard/summary?${search.toString()}`);
 }
+
+/**
+ * Mirrors EmployeeBreakdownRowDto.java exactly. employeeShare is null (not
+ * zero) whenever compensationModelCode isn't 'PERCENTAGE' -- the system only
+ * tracks a per-transaction employee cut for percentage-model employees, so a
+ * FIXED_SALARY employee genuinely has no equivalent figure today. Render
+ * that gap as "אין נתון", not "₪0".
+ */
+export interface EmployeeBreakdownRow {
+  employeeId: number;
+  employeeName: string;
+  employeeTypeName: string;
+  compensationModelCode: string;
+  revenueGenerated: number;
+  employeeShare: number | null;
+  businessShare: number;
+  transactionCount: number;
+}
+
+/** Mirrors EmployeeBreakdownDto.java. Excludes chair-renters (FIXED_AMOUNT) entirely. */
+export interface EmployeeBreakdown {
+  month: number;
+  year: number;
+  profitCenterId: number | null;
+  employees: EmployeeBreakdownRow[];
+}
+
+export function getEmployeeBreakdown(params: DashboardSummaryParams): Promise<EmployeeBreakdown> {
+  const search = new URLSearchParams();
+  search.set('month', String(params.month));
+  search.set('year', String(params.year));
+  if (params.profitCenterId != null) search.set('profitCenterId', String(params.profitCenterId));
+  return apiFetch<EmployeeBreakdown>(`/dashboard/employee-breakdown?${search.toString()}`);
+}

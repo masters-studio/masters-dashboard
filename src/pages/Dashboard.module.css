@@ -85,3 +85,13 @@
   font-size: 14px;
   margin-bottom: 20px;
 }
+
+/* ---------------- per-employee breakdown ---------------- */
+
+.employeeBreakdownSection {
+  margin-top: 36px;
+}
+
+.employeeBreakdownSection p {
+  margin-bottom: 14px;
+}

@@ -1,8 +1,15 @@
 import { useEffect, useState } from 'react';
-import { getDashboardSummary, type DashboardSummary } from '../api/dashboard';
+import {
+  getDashboardSummary,
+  getEmployeeBreakdown,
+  type DashboardSummary,
+  type EmployeeBreakdown,
+  type EmployeeBreakdownRow,
+} from '../api/dashboard';
 import { listProfitCenters, type SimpleLookup } from '../api/lookups';
 import { translateApiError } from '../api/errorMessages';
 import { HEBREW_MONTHS } from '../constants/hebrewMonths';
+import { DataTable, type Column } from '../components/DataTable';
 import domainStyles from '../styles/domainScreen.module.css';
 import styles from './Dashboard.module.css';
 
@@ -21,6 +28,24 @@ function kpiValueClass(amount: number): string {
 }
 
 /**
+ * "אין נתון" (no data), not "₪0" — employeeShare is genuinely untracked for
+ * non-PERCENTAGE employees (see EmployeeBreakdownRowDto's javadoc), and a
+ * literal 0 would misleadingly read as "got paid nothing".
+ */
+const employeeBreakdownColumns: Column<EmployeeBreakdownRow>[] = [
+  { header: 'שם', render: (r) => r.employeeName },
+  { header: 'סוג', render: (r) => r.employeeTypeName },
+  { header: 'הכנסה שהביא/ה (נטו)', render: (r) => formatCurrency(r.revenueGenerated), align: 'end' },
+  {
+    header: 'חלק העובד/ת',
+    render: (r) => (r.employeeShare != null ? formatCurrency(r.employeeShare) : 'אין נתון'),
+    align: 'end',
+  },
+  { header: 'חלק העסק', render: (r) => formatCurrency(r.businessShare), align: 'end' },
+  { header: 'מס׳ עסקאות', render: (r) => r.transactionCount, align: 'end' },
+];
+
+/**
  * Monthly financial summary — GET /dashboard/summary. See DashboardService's
  * class javadoc (masters-api) for the scope decisions behind these numbers:
  * income is reported two ways (total processed vs. what the business
@@ -32,7 +57,9 @@ function kpiValueClass(amount: number): string {
 export default function Dashboard() {
   const [profitCenters, setProfitCenters] = useState<SimpleLookup[]>([]);
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
+  const [breakdown, setBreakdown] = useState<EmployeeBreakdown | null>(null);
   const [loading, setLoading] = useState(true);
+  const [breakdownLoading, setBreakdownLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const [month, setMonth] = useState(now.getMonth() + 1);
@@ -56,6 +83,18 @@ export default function Dashboard() {
       .then(setSummary)
       .catch((err) => setError(translateApiError(err)))
       .finally(() => setLoading(false));
+  }, [month, year, profitCenterFilter]);
+
+  useEffect(() => {
+    setBreakdownLoading(true);
+    getEmployeeBreakdown({
+      month,
+      year,
+      profitCenterId: profitCenterFilter ? Number(profitCenterFilter) : undefined,
+    })
+      .then(setBreakdown)
+      .catch((err) => setError(translateApiError(err)))
+      .finally(() => setBreakdownLoading(false));
   }, [month, year, profitCenterFilter]);
 
   const hasAnyActivity =
@@ -214,6 +253,21 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
+          </div>
+
+          <div className={styles.employeeBreakdownSection}>
+            <div className={styles.sectionTitle}>פירוט לפי עובד/ת</div>
+            <p className={domainStyles.hint}>
+              כמה כל עובד/ת הביא/ה בהכנסות בתקופה שנבחרה. שוכרי כיסא אינם כלולים כאן — השכירות
+              שלהם היא סכום קבוע חודשי, לא ביצוע.
+            </p>
+            <DataTable
+              columns={employeeBreakdownColumns}
+              rows={breakdown?.employees ?? []}
+              rowKey={(r) => r.employeeId}
+              loading={breakdownLoading}
+              emptyMessage="אין עובדים עם הכנסות בתקופה שנבחרה"
+            />
           </div>
         </>
       ) : null}
