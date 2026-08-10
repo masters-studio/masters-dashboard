@@ -1,26 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './auth/AuthContext';
+import { AuthProvider } from './auth/AuthContext';
 import { ProtectedRoute } from './auth/ProtectedRoute';
+import { Layout } from './components/Layout';
 import LoginPage from './pages/Login';
-
-// Placeholder for the real navigation shell (next slice) — exists here only
-// to prove a protected route renders and logout actually clears the session.
-function DashboardHome() {
-  const { username, logout } = useAuth();
-  return (
-    <div className="container" style={{ paddingBlock: 48 }}>
-      <h1>
-        לוח בקרה<span className="dot" />
-      </h1>
-      <p style={{ color: 'var(--pearl-muted)', marginTop: 12 }}>
-        {username ? `מחובר בתור ${username}` : 'התחברת בהצלחה'}
-      </p>
-      <button className="btn btn-ghost" style={{ marginTop: 20 }} onClick={logout}>
-        התנתקות
-      </button>
-    </div>
-  );
-}
+import Dashboard from './pages/Dashboard';
+import ComingSoon from './pages/ComingSoon';
 
 export default function App() {
   return (
@@ -28,9 +12,20 @@ export default function App() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<DashboardHome />} />
+            <Route element={<Layout />}>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/employees" element={<ComingSoon title="עובדים" />} />
+              <Route path="/suppliers" element={<ComingSoon title="ספקים" />} />
+              <Route path="/categories" element={<ComingSoon title="קטגוריות" />} />
+              <Route path="/income" element={<ComingSoon title="הכנסות" />} />
+              <Route path="/expenses" element={<ComingSoon title="הוצאות" />} />
+              <Route path="/goals" element={<ComingSoon title="יעדים" />} />
+              <Route path="/audit-log" element={<ComingSoon title="יומן שינויים" />} />
+            </Route>
           </Route>
+
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>

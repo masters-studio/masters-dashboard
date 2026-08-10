@@ -32,7 +32,7 @@ export default function LoginPage() {
   return (
     <div className={styles.page}>
       <div className={styles.card}>
-        <img src="/logo.png" alt="Masters Studio" className={styles.logo} />
+        <img src="/logo.svg" alt="Masters Studio" className={styles.logo} />
         <h1>
           התחברות<span className="dot" />
         </h1>

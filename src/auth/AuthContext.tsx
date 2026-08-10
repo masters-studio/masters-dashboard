@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { getToken, clearToken, onUnauthorized } from '../api/client';
 import { login as apiLogin } from '../api/auth';
-import { isTokenExpired } from './jwt';
+import { decodeToken, isTokenExpired } from './jwt';
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -22,11 +22,10 @@ function readInitialState(): AuthState {
     if (token) clearToken(); // stale token left over from a prior session
     return { isAuthenticated: false, username: null, role: null };
   }
-  // The token proves auth on reload; username/role only get (re)populated
-  // precisely on a fresh login. Nothing currently reads them outside that
-  // flow, so this is fine — revisit if a page needs the display name back
-  // without forcing a re-login.
-  return { isAuthenticated: true, username: null, role: null };
+  // Read username/role straight from the token's own claims — no need to
+  // wait for a fresh login just to know who's logged in after a reload.
+  const decoded = decodeToken(token);
+  return { isAuthenticated: true, username: decoded?.sub ?? null, role: decoded?.role ?? null };
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {

@@ -1,0 +1,86 @@
+.shell {
+  min-height: 100vh;
+  display: grid;
+  /* Grid respects dir="rtl" on its own — column 1 lands on the visual right,
+     matching "start" — no RTL-specific overrides needed here. */
+  grid-template-columns: 248px 1fr;
+}
+
+.sidebar {
+  background: var(--surface);
+  border-inline-start: 1px solid var(--line);
+  padding: 24px 18px;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.logo {
+  height: 20px;
+  width: auto;
+  margin-bottom: 32px;
+  margin-inline-start: 10px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.navLink {
+  display: block;
+  padding: 11px 14px;
+  border-radius: 10px;
+  color: var(--pearl-muted);
+  font-weight: 700;
+  font-size: 14.5px;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.navLink:hover {
+  background: var(--surface-2);
+  color: var(--pearl);
+}
+
+.navLinkActive {
+  background: var(--orange);
+  color: #141414;
+}
+
+.userBox {
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.username {
+  font-size: 13px;
+  color: var(--pearl-faint);
+  padding-inline: 14px;
+}
+
+.main {
+  padding: 40px;
+  min-width: 0; /* stops wide tables (later slices) from blowing out the grid track */
+}
+
+@media (max-width: 860px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    position: static;
+    height: auto;
+  }
+  .main {
+    padding: 24px;
+  }
+}
