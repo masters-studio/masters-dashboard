@@ -1,0 +1,6 @@
+# SPA fallback: this is a client-side-routed React Router app, so any path
+# (e.g. /login, /employees/5) needs to serve index.html and let the router
+# take over, or a direct link/page-refresh on a non-root route 404s at
+# Netlify's edge before React ever loads. Vite copies public/ verbatim into
+# dist/, so this ends up at dist/_redirects, which Netlify auto-detects.
+/*    /index.html   200
