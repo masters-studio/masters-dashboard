@@ -1,7 +1,7 @@
-/* Shared between EmployeesList and EmployeeForm — the same toolbar/filter/
-   form-grid/badge patterns every future domain screen (Suppliers, Categories,
-   ...) will reuse, so keep this generically named rather than
-   employees-specific where the styles themselves aren't. */
+/* Shared by every domain list+form screen (Employees, Suppliers, Categories,
+   Income, Expenses, Goals, Audit Log) — the toolbar/filter/badge/form-grid
+   patterns are the same across all of them, so this lives here once instead
+   of being copy-pasted into a per-domain .module.css each time. */
 
 .header {
   display: flex;
@@ -117,6 +117,11 @@
 .field textarea:focus {
   outline: none;
   border-color: var(--orange);
+}
+
+.field select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .fieldError {

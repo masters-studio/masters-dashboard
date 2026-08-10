@@ -16,7 +16,7 @@ import {
 } from '../../api/lookups';
 import { translateApiError } from '../../api/errorMessages';
 import { DataTable, type Column } from '../../components/DataTable';
-import styles from './Employees.module.css';
+import styles from '../../styles/domainScreen.module.css';
 
 export default function EmployeesList() {
   const navigate = useNavigate();

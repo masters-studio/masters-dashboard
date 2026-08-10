@@ -13,7 +13,7 @@ import {
   type SimpleLookup,
 } from '../../api/lookups';
 import { translateApiError } from '../../api/errorMessages';
-import styles from './Employees.module.css';
+import styles from '../../styles/domainScreen.module.css';
 
 interface FormState {
   employeeCode: string;

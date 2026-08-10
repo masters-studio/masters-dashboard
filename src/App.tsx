@@ -7,6 +7,8 @@ import Dashboard from './pages/Dashboard';
 import ComingSoon from './pages/ComingSoon';
 import EmployeesList from './pages/Employees/EmployeesList';
 import EmployeeForm from './pages/Employees/EmployeeForm';
+import SuppliersList from './pages/Suppliers/SuppliersList';
+import SupplierForm from './pages/Suppliers/SupplierForm';
 
 export default function App() {
   return (
@@ -21,7 +23,9 @@ export default function App() {
               <Route path="/employees" element={<EmployeesList />} />
               <Route path="/employees/new" element={<EmployeeForm />} />
               <Route path="/employees/:id" element={<EmployeeForm />} />
-              <Route path="/suppliers" element={<ComingSoon title="ספקים" />} />
+              <Route path="/suppliers" element={<SuppliersList />} />
+              <Route path="/suppliers/new" element={<SupplierForm />} />
+              <Route path="/suppliers/:id" element={<SupplierForm />} />
               <Route path="/categories" element={<ComingSoon title="קטגוריות" />} />
               <Route path="/income" element={<ComingSoon title="הכנסות" />} />
               <Route path="/expenses" element={<ComingSoon title="הוצאות" />} />
