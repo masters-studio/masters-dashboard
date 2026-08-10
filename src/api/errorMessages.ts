@@ -51,6 +51,7 @@ const EXACT_MESSAGES: Record<string, string> = {
  */
 const PATTERN_MESSAGES: [RegExp, string][] = [
   [/^No .+ with id \d+$/, 'הפריט שנבחר אינו קיים או נמחק'],
+  [/^No .+ with key /, 'הפריט שנבחר אינו קיים'],
   [/^Missing required parameter/, 'חסר שדה חובה'],
   [/^Invalid value for parameter/, 'ערך לא תקין הוזן'],
   [/is required when/, 'שדה חובה חסר עבור האפשרות שנבחרה'],
@@ -60,6 +61,8 @@ const PATTERN_MESSAGES: [RegExp, string][] = [
   [/is itself a subcategory/, 'לא ניתן לבחור תת-קטגוריה ככטגוריית אב'],
   [/cannot be its own parent/, 'לא ניתן לבחור את הפריט עצמו כקטגוריית אב'],
   [/cannot exceed/, 'הערך שהוזן גבוה מהמותר'],
+  [/must be between/, 'הערך שהוזן אינו בטווח המותר'],
+  [/must be a decimal number/, 'יש להזין מספר תקין'],
   [/does not match|belongs to a different/, 'הבחירה אינה תואמת את שאר הנתונים בטופס'],
 ];
 

@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { to: '/expenses', label: 'הוצאות', end: false },
   { to: '/goals', label: 'יעדים', end: false },
   { to: '/audit-log', label: 'יומן שינויים', end: false },
+  { to: '/settings', label: 'הגדרות', end: false },
 ] as const;
 
 /** Wraps every protected route — sidebar nav, logo, user/logout, then the page itself via <Outlet>. */

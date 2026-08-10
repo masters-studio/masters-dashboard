@@ -17,6 +17,7 @@ import ExpenseTransactionForm from './pages/Expenses/ExpenseTransactionForm';
 import GoalsList from './pages/Goals/GoalsList';
 import GoalForm from './pages/Goals/GoalForm';
 import AuditLogList from './pages/AuditLog/AuditLogList';
+import SettingsList from './pages/Settings/SettingsList';
 
 export default function App() {
   return (
@@ -47,6 +48,7 @@ export default function App() {
               <Route path="/goals/new" element={<GoalForm />} />
               <Route path="/goals/:id" element={<GoalForm />} />
               <Route path="/audit-log" element={<AuditLogList />} />
+              <Route path="/settings" element={<SettingsList />} />
             </Route>
           </Route>
 
