@@ -146,3 +146,33 @@
   gap: 12px;
   margin-top: 8px;
 }
+
+/* ---------------- read-only computed summary (transactions) ---------------- */
+
+.computedPanel {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 22px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px;
+}
+
+.computedItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.computedLabel {
+  font-size: 12px;
+  color: var(--pearl-faint);
+}
+
+.computedValue {
+  font-size: 16px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}

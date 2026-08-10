@@ -11,6 +11,8 @@ import SuppliersList from './pages/Suppliers/SuppliersList';
 import SupplierForm from './pages/Suppliers/SupplierForm';
 import CategoriesList from './pages/Categories/CategoriesList';
 import CategoryForm from './pages/Categories/CategoryForm';
+import IncomeTransactionsList from './pages/Income/IncomeTransactionsList';
+import IncomeTransactionForm from './pages/Income/IncomeTransactionForm';
 
 export default function App() {
   return (
@@ -31,7 +33,9 @@ export default function App() {
               <Route path="/categories" element={<CategoriesList />} />
               <Route path="/categories/new" element={<CategoryForm />} />
               <Route path="/categories/:id" element={<CategoryForm />} />
-              <Route path="/income" element={<ComingSoon title="הכנסות" />} />
+              <Route path="/income" element={<IncomeTransactionsList />} />
+              <Route path="/income/new" element={<IncomeTransactionForm />} />
+              <Route path="/income/:id" element={<IncomeTransactionForm />} />
               <Route path="/expenses" element={<ComingSoon title="הוצאות" />} />
               <Route path="/goals" element={<ComingSoon title="יעדים" />} />
               <Route path="/audit-log" element={<ComingSoon title="יומן שינויים" />} />
