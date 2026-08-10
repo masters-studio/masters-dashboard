@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { listAuditLogs, type AuditLog, type AuditLogListFilters } from '../../api/auditLogs';
 import { translateApiError } from '../../api/errorMessages';
 import { DataTable, type Column } from '../../components/DataTable';
+import { DateField } from '../../components/DateField';
 import domainStyles from '../../styles/domainScreen.module.css';
 import styles from './AuditLog.module.css';
 import {
@@ -111,13 +112,18 @@ export default function AuditLogList() {
             </option>
           ))}
         </select>
-        <input
-          type="number"
-          placeholder="מזהה ישות"
-          value={entityIdFilter}
-          onChange={(e) => setEntityIdFilter(e.target.value)}
-          style={{ width: '110px' }}
-        />
+        <div className={styles.filterWithHint}>
+          <input
+            type="number"
+            placeholder="מזהה ישות"
+            value={entityIdFilter}
+            onChange={(e) => setEntityIdFilter(e.target.value)}
+            style={{ width: '110px' }}
+          />
+          {entityIdFilter && !entityTypeFilter && (
+            <span className={styles.filterHint}>בחרו גם סוג ישות – המספר לבדו לא ייחודי</span>
+          )}
+        </div>
         <input
           type="number"
           placeholder="מזהה משתמש"
@@ -125,8 +131,8 @@ export default function AuditLogList() {
           onChange={(e) => setChangedByFilter(e.target.value)}
           style={{ width: '120px' }}
         />
-        <input type="date" value={fromFilter} onChange={(e) => setFromFilter(e.target.value)} />
-        <input type="date" value={toFilter} onChange={(e) => setToFilter(e.target.value)} />
+        <DateField label="מתאריך" value={fromFilter} onChange={setFromFilter} />
+        <DateField label="עד תאריך" value={toFilter} onChange={setToFilter} />
       </div>
 
       <DataTable

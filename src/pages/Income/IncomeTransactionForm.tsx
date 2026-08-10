@@ -12,6 +12,7 @@ import { listEmployees, type Employee } from '../../api/employees';
 import { listPaymentMethods, listPaymentStatuses, listProfitCenters } from '../../api/lookups';
 import type { SimpleLookup } from '../../api/lookups';
 import { translateApiError } from '../../api/errorMessages';
+import { DateField } from '../../components/DateField';
 import styles from '../../styles/domainScreen.module.css';
 
 interface FormState {
@@ -255,17 +256,17 @@ export default function IncomeTransactionForm() {
             as every other domain form. */}
         <form onSubmit={handleSubmit} noValidate>
           <div className={styles.formGrid}>
-            <label className={styles.field}>
-              תאריך *
-              <input
-                type="date"
+            <div className={styles.field}>
+              <DateField
+                label="תאריך *"
                 value={form.transactionDate}
-                onChange={(e) => set('transactionDate', e.target.value)}
+                onChange={(v) => set('transactionDate', v)}
+                required
               />
               {fieldErrors.transactionDate && (
                 <span className={styles.fieldError}>{fieldErrors.transactionDate}</span>
               )}
-            </label>
+            </div>
 
             <label className={styles.field}>
               מספר עסקה

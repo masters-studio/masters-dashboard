@@ -12,6 +12,7 @@ import { listPaymentMethods, listPaymentStatuses, listProfitCenters, listVatType
 import type { SimpleLookup, VatTypeLookup } from '../../api/lookups';
 import { translateApiError } from '../../api/errorMessages';
 import { DataTable, type Column } from '../../components/DataTable';
+import { DateField } from '../../components/DateField';
 import styles from '../../styles/domainScreen.module.css';
 
 function formatCurrency(amount: number | null): string {
@@ -200,8 +201,8 @@ export default function ExpenseTransactionsList() {
             </option>
           ))}
         </select>
-        <input type="date" value={fromFilter} onChange={(e) => setFromFilter(e.target.value)} />
-        <input type="date" value={toFilter} onChange={(e) => setToFilter(e.target.value)} />
+        <DateField label="מתאריך" value={fromFilter} onChange={setFromFilter} />
+        <DateField label="עד תאריך" value={toFilter} onChange={setToFilter} />
         <label className={styles.checkboxLabel}>
           <input
             type="checkbox"

@@ -195,8 +195,10 @@ export default function SupplierForm() {
                 value={form.supplierCode}
                 onChange={(e) => set('supplierCode', e.target.value)}
               />
-              {fieldErrors.supplierCode && (
+              {fieldErrors.supplierCode ? (
                 <span className={styles.fieldError}>{fieldErrors.supplierCode}</span>
+              ) : (
+                <span className={styles.hint}>אופציונלי – קוד לשימוש פנימי בלבד, לבחירתכם</span>
               )}
             </label>
 

@@ -8,3 +8,21 @@
 .entityLink:hover {
   color: var(--orange-mid);
 }
+
+.filterWithHint {
+  position: relative;
+}
+
+.filterHint {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--pearl-faint);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 5px 10px;
+  z-index: 1;
+}

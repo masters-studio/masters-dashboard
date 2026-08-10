@@ -18,6 +18,7 @@ import {
 } from '../../api/lookups';
 import type { SimpleLookup, VatTypeLookup } from '../../api/lookups';
 import { translateApiError } from '../../api/errorMessages';
+import { DateField } from '../../components/DateField';
 import styles from '../../styles/domainScreen.module.css';
 
 interface FormState {
@@ -306,17 +307,17 @@ export default function ExpenseTransactionForm() {
             as every other domain form. */}
         <form onSubmit={handleSubmit} noValidate>
           <div className={styles.formGrid}>
-            <label className={styles.field}>
-              תאריך *
-              <input
-                type="date"
+            <div className={styles.field}>
+              <DateField
+                label="תאריך *"
                 value={form.expenseDate}
-                onChange={(e) => set('expenseDate', e.target.value)}
+                onChange={(v) => set('expenseDate', v)}
+                required
               />
               {fieldErrors.expenseDate && (
                 <span className={styles.fieldError}>{fieldErrors.expenseDate}</span>
               )}
-            </label>
+            </div>
 
             <label className={styles.field}>
               מספר הוצאה

@@ -1,0 +1,66 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 13px;
+  color: var(--pearl-muted);
+  font-weight: 700;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.group select,
+.group input {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 9px 8px;
+  color: var(--pearl);
+  font-size: 14px;
+  text-align: center;
+}
+
+.day {
+  width: 58px;
+}
+
+.month {
+  width: 92px;
+}
+
+.year {
+  width: 74px;
+  /* hide the native up/down spinner -- this is an id-like value, not a
+     quantity anyone increments with arrows */
+  -moz-appearance: textfield;
+}
+.year::-webkit-outer-spin-button,
+.year::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.clear {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--pearl-faint);
+  width: 30px;
+  height: 34px;
+  cursor: pointer;
+  font-size: 13px;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+}
+.clear:hover {
+  color: var(--danger);
+  border-color: var(--danger);
+}

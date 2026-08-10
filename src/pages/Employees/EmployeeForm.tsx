@@ -226,8 +226,10 @@ export default function EmployeeForm() {
                 value={form.employeeCode}
                 onChange={(e) => set('employeeCode', e.target.value)}
               />
-              {fieldErrors.employeeCode && (
+              {fieldErrors.employeeCode ? (
                 <span className={styles.fieldError}>{fieldErrors.employeeCode}</span>
+              ) : (
+                <span className={styles.hint}>אופציונלי – קוד לשימוש פנימי בלבד, לבחירתכם</span>
               )}
             </label>
 
