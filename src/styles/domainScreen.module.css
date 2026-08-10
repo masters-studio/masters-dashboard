@@ -57,6 +57,14 @@
   color: var(--danger);
 }
 
+/* Neutral third state (e.g. an UPDATE action, next to CREATE=active-green
+   and DELETE=inactive-red) -- orange is the brand accent, not a semantic
+   color, so this deliberately doesn't reuse --orange. */
+.badgeNeutral {
+  background: var(--surface-2);
+  color: var(--pearl-muted);
+}
+
 .pageError {
   background: var(--danger-bg);
   color: var(--danger);

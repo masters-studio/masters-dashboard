@@ -4,7 +4,6 @@ import { ProtectedRoute } from './auth/ProtectedRoute';
 import { Layout } from './components/Layout';
 import LoginPage from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import ComingSoon from './pages/ComingSoon';
 import EmployeesList from './pages/Employees/EmployeesList';
 import EmployeeForm from './pages/Employees/EmployeeForm';
 import SuppliersList from './pages/Suppliers/SuppliersList';
@@ -17,6 +16,7 @@ import ExpenseTransactionsList from './pages/Expenses/ExpenseTransactionsList';
 import ExpenseTransactionForm from './pages/Expenses/ExpenseTransactionForm';
 import GoalsList from './pages/Goals/GoalsList';
 import GoalForm from './pages/Goals/GoalForm';
+import AuditLogList from './pages/AuditLog/AuditLogList';
 
 export default function App() {
   return (
@@ -46,7 +46,7 @@ export default function App() {
               <Route path="/goals" element={<GoalsList />} />
               <Route path="/goals/new" element={<GoalForm />} />
               <Route path="/goals/:id" element={<GoalForm />} />
-              <Route path="/audit-log" element={<ComingSoon title="יומן שינויים" />} />
+              <Route path="/audit-log" element={<AuditLogList />} />
             </Route>
           </Route>
 
