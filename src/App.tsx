@@ -5,6 +5,8 @@ import { Layout } from './components/Layout';
 import LoginPage from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import ComingSoon from './pages/ComingSoon';
+import EmployeesList from './pages/Employees/EmployeesList';
+import EmployeeForm from './pages/Employees/EmployeeForm';
 
 export default function App() {
   return (
@@ -16,7 +18,9 @@ export default function App() {
           <Route element={<ProtectedRoute />}>
             <Route element={<Layout />}>
               <Route path="/" element={<Dashboard />} />
-              <Route path="/employees" element={<ComingSoon title="עובדים" />} />
+              <Route path="/employees" element={<EmployeesList />} />
+              <Route path="/employees/new" element={<EmployeeForm />} />
+              <Route path="/employees/:id" element={<EmployeeForm />} />
               <Route path="/suppliers" element={<ComingSoon title="ספקים" />} />
               <Route path="/categories" element={<ComingSoon title="קטגוריות" />} />
               <Route path="/income" element={<ComingSoon title="הכנסות" />} />
