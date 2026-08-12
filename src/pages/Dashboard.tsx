@@ -8,8 +8,10 @@ import {
 } from '../api/dashboard';
 import { listProfitCenters, type SimpleLookup } from '../api/lookups';
 import { translateApiError } from '../api/errorMessages';
+import { exportDashboardSummary } from '../api/export';
 import { HEBREW_MONTHS } from '../constants/hebrewMonths';
 import { DataTable, type Column } from '../components/DataTable';
+import { ExportButton } from '../components/ExportButton';
 import GoalProgress from './GoalProgress';
 import domainStyles from '../styles/domainScreen.module.css';
 import styles from './Dashboard.module.css';
@@ -107,6 +109,15 @@ export default function Dashboard() {
         <h1>
           דשבורד<span className="dot" />
         </h1>
+        <ExportButton
+          onExport={() =>
+            exportDashboardSummary({
+              month,
+              year,
+              profitCenterId: profitCenterFilter ? Number(profitCenterFilter) : undefined,
+            })
+          }
+        />
       </div>
 
       {error && <p className={domainStyles.pageError}>{error}</p>}

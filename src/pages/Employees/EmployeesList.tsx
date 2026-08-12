@@ -15,7 +15,9 @@ import {
   type SimpleLookup,
 } from '../../api/lookups';
 import { translateApiError } from '../../api/errorMessages';
+import { exportEmployees } from '../../api/export';
 import { DataTable, type Column } from '../../components/DataTable';
+import { ExportButton } from '../../components/ExportButton';
 import styles from '../../styles/domainScreen.module.css';
 
 export default function EmployeesList() {
@@ -145,9 +147,12 @@ export default function EmployeesList() {
         <h1>
           עובדים<span className="dot" />
         </h1>
-        <button type="button" className="btn btn-primary" onClick={() => navigate('/employees/new')}>
-          עובד חדש
-        </button>
+        <div className={styles.headerActions}>
+          <ExportButton onExport={() => exportEmployees(includeInactive)} />
+          <button type="button" className="btn btn-primary" onClick={() => navigate('/employees/new')}>
+            עובד חדש
+          </button>
+        </div>
       </div>
 
       {error && <p className={styles.pageError}>{error}</p>}

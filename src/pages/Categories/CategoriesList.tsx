@@ -10,6 +10,8 @@ import {
 } from '../../api/categories';
 import { listProfitCenters, type SimpleLookup } from '../../api/lookups';
 import { translateApiError } from '../../api/errorMessages';
+import { exportCategories } from '../../api/export';
+import { ExportButton } from '../../components/ExportButton';
 import domainStyles from '../../styles/domainScreen.module.css';
 import styles from './Categories.module.css';
 
@@ -137,9 +139,20 @@ export default function CategoriesList() {
         <h1>
           קטגוריות<span className="dot" />
         </h1>
-        <button type="button" className="btn btn-primary" onClick={() => navigate('/categories/new')}>
-          קטגוריה חדשה
-        </button>
+        <div className={domainStyles.headerActions}>
+          <ExportButton
+            onExport={() =>
+              exportCategories({
+                type: typeFilter,
+                profitCenterId: profitCenterFilter ? Number(profitCenterFilter) : undefined,
+                includeInactive,
+              })
+            }
+          />
+          <button type="button" className="btn btn-primary" onClick={() => navigate('/categories/new')}>
+            קטגוריה חדשה
+          </button>
+        </div>
       </div>
 
       {error && <p className={domainStyles.pageError}>{error}</p>}

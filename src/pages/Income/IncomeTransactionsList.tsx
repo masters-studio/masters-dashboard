@@ -12,8 +12,10 @@ import { listPaymentMethods, listPaymentStatuses } from '../../api/lookups';
 import type { SimpleLookup } from '../../api/lookups';
 import { listProfitCenters } from '../../api/lookups';
 import { translateApiError } from '../../api/errorMessages';
+import { exportIncomeTransactions } from '../../api/export';
 import { DataTable, type Column } from '../../components/DataTable';
 import { DateField } from '../../components/DateField';
+import { ExportButton } from '../../components/ExportButton';
 import styles from '../../styles/domainScreen.module.css';
 
 function formatCurrency(amount: number | null): string {
@@ -169,6 +171,15 @@ export default function IncomeTransactionsList() {
           הכנסות<span className="dot" />
         </h1>
         <div className={styles.headerActions}>
+          <ExportButton
+            onExport={() =>
+              exportIncomeTransactions({
+                profitCenterId: profitCenterFilter ? Number(profitCenterFilter) : undefined,
+                from: fromFilter || undefined,
+                to: toFilter || undefined,
+              })
+            }
+          />
           <button type="button" className="btn btn-ghost" onClick={() => navigate('/income/quick-entry')}>
             הזנה מהירה
           </button>

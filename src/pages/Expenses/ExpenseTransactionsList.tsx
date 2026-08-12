@@ -11,8 +11,10 @@ import { listSuppliers, type Supplier } from '../../api/suppliers';
 import { listPaymentMethods, listPaymentStatuses, listProfitCenters, listVatTypes } from '../../api/lookups';
 import type { SimpleLookup, VatTypeLookup } from '../../api/lookups';
 import { translateApiError } from '../../api/errorMessages';
+import { exportExpenseTransactions } from '../../api/export';
 import { DataTable, type Column } from '../../components/DataTable';
 import { DateField } from '../../components/DateField';
+import { ExportButton } from '../../components/ExportButton';
 import styles from '../../styles/domainScreen.module.css';
 
 function formatCurrency(amount: number | null): string {
@@ -177,9 +179,20 @@ export default function ExpenseTransactionsList() {
         <h1>
           הוצאות<span className="dot" />
         </h1>
-        <button type="button" className="btn btn-primary" onClick={() => navigate('/expenses/new')}>
-          הוצאה חדשה
-        </button>
+        <div className={styles.headerActions}>
+          <ExportButton
+            onExport={() =>
+              exportExpenseTransactions({
+                profitCenterId: profitCenterFilter ? Number(profitCenterFilter) : undefined,
+                from: fromFilter || undefined,
+                to: toFilter || undefined,
+              })
+            }
+          />
+          <button type="button" className="btn btn-primary" onClick={() => navigate('/expenses/new')}>
+            הוצאה חדשה
+          </button>
+        </div>
       </div>
 
       {error && <p className={styles.pageError}>{error}</p>}

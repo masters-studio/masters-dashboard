@@ -10,7 +10,9 @@ import { listCategories, topLevelOf, type Category } from '../../api/categories'
 import { listExpenseNatures, listPaymentMethods, listPaymentTerms } from '../../api/lookups';
 import type { SimpleLookup } from '../../api/lookups';
 import { translateApiError } from '../../api/errorMessages';
+import { exportSuppliers } from '../../api/export';
 import { DataTable, type Column } from '../../components/DataTable';
+import { ExportButton } from '../../components/ExportButton';
 import styles from '../../styles/domainScreen.module.css';
 
 export default function SuppliersList() {
@@ -138,9 +140,12 @@ export default function SuppliersList() {
         <h1>
           ספקים<span className="dot" />
         </h1>
-        <button type="button" className="btn btn-primary" onClick={() => navigate('/suppliers/new')}>
-          ספק חדש
-        </button>
+        <div className={styles.headerActions}>
+          <ExportButton onExport={() => exportSuppliers(includeInactive)} />
+          <button type="button" className="btn btn-primary" onClick={() => navigate('/suppliers/new')}>
+            ספק חדש
+          </button>
+        </div>
       </div>
 
       {error && <p className={styles.pageError}>{error}</p>}
