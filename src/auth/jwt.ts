@@ -19,7 +19,16 @@ export interface DecodedToken {
 export function decodeToken(token: string): DecodedToken | null {
   try {
     const payload = token.split('.')[1];
-    const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+    // atob() decodes base64 into a byte-per-character string, not real
+    // Unicode -- fine as long as every claim is ASCII (username/role always
+    // were), but the JWT payload itself is UTF-8 (JWT spec), so a non-ASCII
+    // claim (e.g. a Hebrew displayName) needs re-interpreting as UTF-8 or it
+    // comes out as mojibake (each multi-byte character split into separate
+    // Latin-1-looking characters). The percent-encode + decodeURIComponent
+    // round-trip is the standard way to do that without extra dependencies.
+    const bytes = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+    const percentEncoded = Array.from(bytes, (c) => '%' + c.charCodeAt(0).toString(16).padStart(2, '0')).join('');
+    const json = decodeURIComponent(percentEncoded);
     return JSON.parse(json) as DecodedToken;
   } catch {
     return null;
