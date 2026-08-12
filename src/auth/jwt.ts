@@ -1,6 +1,7 @@
 export interface DecodedToken {
   sub: string; // username — matches JwtUtil.java's .subject(username)
   role: string;
+  displayName?: string; // optional, cosmetic — see JwtUtil.java's CLAIM_DISPLAY_NAME
   exp: number; // seconds since epoch — matches JwtUtil.java's .expiration(...)
   iat: number;
 }

@@ -16,7 +16,7 @@ const NAV_ITEMS = [
 
 /** Wraps every protected route — sidebar nav, logo, user/logout, then the page itself via <Outlet>. */
 export function Layout() {
-  const { username, logout } = useAuth();
+  const { displayName, logout } = useAuth();
 
   return (
     <div className={styles.shell}>
@@ -37,7 +37,7 @@ export function Layout() {
         </nav>
 
         <div className={styles.userBox}>
-          {username && <span className={styles.username}>{username}</span>}
+          {displayName && <span className={styles.username}>{displayName}</span>}
           <button className="btn btn-ghost" onClick={logout}>
             התנתקות
           </button>
