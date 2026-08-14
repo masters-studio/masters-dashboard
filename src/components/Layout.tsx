@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { to: '/categories', label: 'קטגוריות', end: false },
   { to: '/income', label: 'הכנסות', end: false },
   { to: '/expenses', label: 'הוצאות', end: false },
+  { to: '/recurring-expenses', label: 'הוצאות קבועות', end: false },
   { to: '/goals', label: 'יעדים', end: false },
   { to: '/audit-log', label: 'יומן שינויים', end: false },
   { to: '/settings', label: 'הגדרות', end: false },

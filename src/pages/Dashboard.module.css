@@ -86,6 +86,48 @@
   margin-bottom: 20px;
 }
 
+/* ---------------- payment-method breakdown ---------------- */
+
+.paymentMethodSection {
+  margin-top: 36px;
+}
+
+.paymentMethodGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.paymentMethodCard {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 20px 22px;
+}
+
+.paymentMethodCardTitle {
+  font-size: 13px;
+  color: var(--pearl-faint);
+  font-weight: 700;
+}
+
+.paymentMethodRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 10px;
+}
+
+.paymentMethodRowLabel {
+  font-size: 13px;
+  color: var(--pearl-muted);
+}
+
+.paymentMethodRowValue {
+  font-family: var(--ff-display);
+  font-size: 18px;
+}
+
 /* ---------------- per-employee breakdown ---------------- */
 
 .employeeBreakdownSection {

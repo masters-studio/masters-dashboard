@@ -23,6 +23,7 @@ export const ENTITY_TYPE_LABELS: Record<string, string> = {
   IncomeTransaction: 'עסקת הכנסה',
   ExpenseTransaction: 'עסקת הוצאה',
   Goal: 'יעד',
+  RecurringExpense: 'הוצאה קבועה',
 };
 
 export const ACTION_LABELS: Record<string, string> = {
@@ -39,6 +40,7 @@ export const ENTITY_ROUTES: Record<string, string> = {
   IncomeTransaction: '/income',
   ExpenseTransaction: '/expenses',
   Goal: '/goals',
+  RecurringExpense: '/recurring-expenses',
 };
 
 /**
@@ -109,12 +111,18 @@ export const FIELD_LABELS: Record<string, string> = {
   vatTypeId: 'סוג מע"מ',
   deductibleVat: 'מע"מ ניתן לניכוי',
   trueBusinessCost: 'עלות אמיתית לעסק',
+  invoiceSubmitted: 'הגשה לרו"ח',
+  recurringExpenseId: 'הוצאה קבועה מקושרת',
 
   // Goal
   month: 'חודש',
   year: 'שנה',
   goalType: 'סוג יעד',
   targetAmount: 'סכום יעד',
+
+  // Recurring expense
+  amount: 'סכום',
+  dayOfMonth: 'יום בחודש',
 };
 
 /**

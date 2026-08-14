@@ -14,6 +14,8 @@ import IncomeTransactionsList from './pages/Income/IncomeTransactionsList';
 import IncomeTransactionForm from './pages/Income/IncomeTransactionForm';
 import ExpenseTransactionsList from './pages/Expenses/ExpenseTransactionsList';
 import ExpenseTransactionForm from './pages/Expenses/ExpenseTransactionForm';
+import RecurringExpensesList from './pages/RecurringExpenses/RecurringExpensesList';
+import RecurringExpenseForm from './pages/RecurringExpenses/RecurringExpenseForm';
 import GoalsList from './pages/Goals/GoalsList';
 import GoalForm from './pages/Goals/GoalForm';
 import AuditLogList from './pages/AuditLog/AuditLogList';
@@ -44,6 +46,9 @@ export default function App() {
               <Route path="/expenses" element={<ExpenseTransactionsList />} />
               <Route path="/expenses/new" element={<ExpenseTransactionForm />} />
               <Route path="/expenses/:id" element={<ExpenseTransactionForm />} />
+              <Route path="/recurring-expenses" element={<RecurringExpensesList />} />
+              <Route path="/recurring-expenses/new" element={<RecurringExpenseForm />} />
+              <Route path="/recurring-expenses/:id" element={<RecurringExpenseForm />} />
               <Route path="/goals" element={<GoalsList />} />
               <Route path="/goals/new" element={<GoalForm />} />
               <Route path="/goals/:id" element={<GoalForm />} />

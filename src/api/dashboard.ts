@@ -34,6 +34,14 @@ export interface DashboardSummary {
   vatBalance: number;
 
   netProfit: number;
+
+  /** Sum of active recurring-expense templates' amounts in this profit-centre
+   *  scope, regardless of which month is being viewed. */
+  recurringExpensesTotal: number;
+  /** Of recurringExpensesTotal, how much hasn't "come due" yet this period —
+   *  counts down as each template's day-of-month passes when viewing the
+   *  real current month; the full total for a future month; 0 for a past one. */
+  recurringExpensesRemaining: number;
 }
 
 export interface DashboardSummaryParams {
@@ -83,4 +91,32 @@ export function getEmployeeBreakdown(params: DashboardSummaryParams): Promise<Em
   search.set('year', String(params.year));
   if (params.profitCenterId != null) search.set('profitCenterId', String(params.profitCenterId));
   return apiFetch<EmployeeBreakdown>(`/dashboard/employee-breakdown?${search.toString()}`);
+}
+
+/** Mirrors PaymentMethodBreakdownRowDto.java. A payment method with no
+ *  income/expense in the period still gets a row, at ₪0 — not omitted. */
+export interface PaymentMethodBreakdownRow {
+  paymentMethodId: number;
+  paymentMethodName: string;
+  totalIncome: number;
+  totalExpense: number;
+}
+
+/** Mirrors PaymentMethodBreakdownDto.java. Transactions with no payment
+ *  method set are excluded entirely, not folded into a catch-all row. */
+export interface PaymentMethodBreakdown {
+  month: number;
+  year: number;
+  profitCenterId: number | null;
+  methods: PaymentMethodBreakdownRow[];
+}
+
+export function getPaymentMethodBreakdown(
+  params: DashboardSummaryParams,
+): Promise<PaymentMethodBreakdown> {
+  const search = new URLSearchParams();
+  search.set('month', String(params.month));
+  search.set('year', String(params.year));
+  if (params.profitCenterId != null) search.set('profitCenterId', String(params.profitCenterId));
+  return apiFetch<PaymentMethodBreakdown>(`/dashboard/payment-method-breakdown?${search.toString()}`);
 }

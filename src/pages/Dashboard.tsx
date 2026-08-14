@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   getDashboardSummary,
   getEmployeeBreakdown,
+  getPaymentMethodBreakdown,
   type DashboardSummary,
   type EmployeeBreakdown,
   type EmployeeBreakdownRow,
+  type PaymentMethodBreakdown,
 } from '../api/dashboard';
 import { listProfitCenters, type SimpleLookup } from '../api/lookups';
 import { translateApiError } from '../api/errorMessages';
@@ -61,6 +64,7 @@ export default function Dashboard() {
   const [profitCenters, setProfitCenters] = useState<SimpleLookup[]>([]);
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [breakdown, setBreakdown] = useState<EmployeeBreakdown | null>(null);
+  const [paymentBreakdown, setPaymentBreakdown] = useState<PaymentMethodBreakdown | null>(null);
   const [loading, setLoading] = useState(true);
   const [breakdownLoading, setBreakdownLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -98,6 +102,16 @@ export default function Dashboard() {
       .then(setBreakdown)
       .catch((err) => setError(translateApiError(err)))
       .finally(() => setBreakdownLoading(false));
+  }, [month, year, profitCenterFilter]);
+
+  useEffect(() => {
+    getPaymentMethodBreakdown({
+      month,
+      year,
+      profitCenterId: profitCenterFilter ? Number(profitCenterFilter) : undefined,
+    })
+      .then(setPaymentBreakdown)
+      .catch((err) => setError(translateApiError(err)));
   }, [month, year, profitCenterFilter]);
 
   const hasAnyActivity =
@@ -239,7 +253,25 @@ export default function Dashboard() {
                     {formatCurrency(summary.totalExpensesTrueCost)}
                   </span>
                 </div>
+                <div className={domainStyles.computedItem}>
+                  <span className={domainStyles.computedLabel}>הוצאות קבועות צפויות (סה״כ)</span>
+                  <span className={domainStyles.computedValue}>
+                    {formatCurrency(summary.recurringExpensesTotal)}
+                  </span>
+                </div>
+                <div className={domainStyles.computedItem}>
+                  <span className={domainStyles.computedLabel}>מהן, טרם ירדו החודש</span>
+                  <span className={domainStyles.computedValue}>
+                    {formatCurrency(summary.recurringExpensesRemaining)}
+                  </span>
+                </div>
               </div>
+              {summary.recurringExpensesTotal > 0 && (
+                <p className={domainStyles.hint}>
+                  יורד אוטומטית בכל חודש, ביום שנקבע לכל הוצאה קבועה —{' '}
+                  <Link to="/recurring-expenses">ניהול הוצאות קבועות</Link>
+                </p>
+              )}
             </div>
 
             <div>
@@ -264,6 +296,25 @@ export default function Dashboard() {
                   </span>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <div className={styles.paymentMethodSection}>
+            <div className={styles.sectionTitle}>לפי אמצעי תשלום</div>
+            <div className={styles.paymentMethodGrid}>
+              {(paymentBreakdown?.methods ?? []).map((m) => (
+                <div key={m.paymentMethodId} className={styles.paymentMethodCard}>
+                  <div className={styles.paymentMethodCardTitle}>{m.paymentMethodName}</div>
+                  <div className={styles.paymentMethodRow}>
+                    <span className={styles.paymentMethodRowLabel}>הכנסות</span>
+                    <span className={styles.paymentMethodRowValue}>{formatCurrency(m.totalIncome)}</span>
+                  </div>
+                  <div className={styles.paymentMethodRow}>
+                    <span className={styles.paymentMethodRowLabel}>הוצאות</span>
+                    <span className={styles.paymentMethodRowValue}>{formatCurrency(m.totalExpense)}</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
