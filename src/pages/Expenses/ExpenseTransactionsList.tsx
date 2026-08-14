@@ -153,6 +153,14 @@ export default function ExpenseTransactionsList() {
     { header: 'אמצעי תשלום', render: (t) => paymentMethodName(t.paymentMethodId) },
     { header: 'סטטוס תשלום', render: (t) => paymentStatusName(t.paymentStatusId) },
     {
+      header: 'הגשה רו"ח',
+      render: (t) => (
+        <span className={`${styles.badge} ${t.invoiceSubmitted ? styles.badgeActive : styles.badgeInactive}`}>
+          {t.invoiceSubmitted ? 'הוגשה' : 'לא הוגשה'}
+        </span>
+      ),
+    },
+    {
       header: '',
       render: (t) =>
         t.deletedAt ? (

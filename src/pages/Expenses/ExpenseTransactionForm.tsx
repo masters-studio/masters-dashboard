@@ -37,6 +37,7 @@ interface FormState {
   vatTypeId: string;
   deductibleVat: string;
   paymentStatusId: string;
+  invoiceSubmitted: boolean;
   referenceNumber: string;
   notes: string;
 }
@@ -55,6 +56,7 @@ const EMPTY_FORM: FormState = {
   vatTypeId: '',
   deductibleVat: '',
   paymentStatusId: '',
+  invoiceSubmitted: false,
   referenceNumber: '',
   notes: '',
 };
@@ -152,6 +154,7 @@ export default function ExpenseTransactionForm() {
           vatTypeId: String(t.vatTypeId),
           deductibleVat: String(t.deductibleVat),
           paymentStatusId: String(t.paymentStatusId),
+          invoiceSubmitted: t.invoiceSubmitted,
           referenceNumber: t.referenceNumber ?? '',
           notes: t.notes ?? '',
         });
@@ -247,6 +250,7 @@ export default function ExpenseTransactionForm() {
       vatTypeId: Number(form.vatTypeId),
       deductibleVat: isPartialVat && form.deductibleVat ? Number(form.deductibleVat) : null,
       paymentStatusId: Number(form.paymentStatusId),
+      invoiceSubmitted: form.invoiceSubmitted,
       referenceNumber: form.referenceNumber.trim() || null,
       notes: form.notes.trim() || null,
     };
@@ -519,6 +523,17 @@ export default function ExpenseTransactionForm() {
               {fieldErrors.paymentStatusId && (
                 <span className={styles.fieldError}>{fieldErrors.paymentStatusId}</span>
               )}
+            </label>
+
+            <label className={styles.field}>
+              חשבונית הוגשה?
+              <select
+                value={String(form.invoiceSubmitted)}
+                onChange={(e) => set('invoiceSubmitted', e.target.value === 'true')}
+              >
+                <option value="false">לא הוגשה</option>
+                <option value="true">הוגשה</option>
+              </select>
             </label>
 
             <label className={styles.field}>

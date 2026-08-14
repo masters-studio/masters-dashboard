@@ -23,6 +23,7 @@ export interface ExpenseTransaction {
   deductibleVat: number;
   trueBusinessCost: number;
   paymentStatusId: number;
+  invoiceSubmitted: boolean;
   referenceNumber: string | null;
   notes: string | null;
   createdAt: string;
@@ -55,6 +56,8 @@ export interface ExpenseTransactionRequest {
   vatTypeId: number;
   deductibleVat: number | null;
   paymentStatusId: number;
+  /** null defaults to false ("לא הוגשה") server-side. */
+  invoiceSubmitted: boolean | null;
   referenceNumber: string | null;
   notes: string | null;
 }
