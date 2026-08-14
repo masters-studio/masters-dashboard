@@ -80,3 +80,14 @@ export function updateEmployee(id: number, request: EmployeeRequest): Promise<Em
 export function deactivateEmployee(id: number): Promise<void> {
   return apiFetch<void>(`/employees/${id}`, { method: 'DELETE' });
 }
+
+/** Reverses deactivateEmployee — sets active=true. */
+export function activateEmployee(id: number): Promise<void> {
+  return apiFetch<void>(`/employees/${id}/activate`, { method: 'POST' });
+}
+
+/** A genuine, irreversible delete — only succeeds if already inactive and
+ *  nothing references this employee (see EmployeeService#deletePermanently). */
+export function deleteEmployeePermanently(id: number): Promise<void> {
+  return apiFetch<void>(`/employees/${id}/permanent`, { method: 'DELETE' });
+}

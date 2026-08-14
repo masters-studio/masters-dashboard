@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  activateEmployee,
   deactivateEmployee,
+  deleteEmployeePermanently,
   listEmployees,
   type Employee,
   type EmployeeListFilters,
@@ -107,6 +109,33 @@ export default function EmployeesList() {
     }
   }
 
+  async function handleActivate(employee: Employee) {
+    setBusyId(employee.id);
+    setError(null);
+    try {
+      await activateEmployee(employee.id);
+      loadEmployees();
+    } catch (err) {
+      setError(translateApiError(err));
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  async function handleDeletePermanently(employee: Employee) {
+    if (!window.confirm(`למחוק את ${employee.name} לצמיתות? פעולה זו אינה הפיכה.`)) return;
+    setBusyId(employee.id);
+    setError(null);
+    try {
+      await deleteEmployeePermanently(employee.id);
+      loadEmployees();
+    } catch (err) {
+      setError(translateApiError(err));
+    } finally {
+      setBusyId(null);
+    }
+  }
+
   const columns: Column<Employee>[] = [
     { header: 'קוד', render: (e) => e.employeeCode ?? '—', width: '90px' },
     { header: 'שם', render: (e) => e.name },
@@ -125,7 +154,7 @@ export default function EmployeesList() {
       header: '',
       render: (e) => (
         <div className={styles.actionCell} onClick={(evt) => evt.stopPropagation()}>
-          {e.active && (
+          {e.active ? (
             <button
               type="button"
               className="btn btn-danger"
@@ -134,6 +163,25 @@ export default function EmployeesList() {
             >
               השבתה
             </button>
+          ) : (
+            <>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                disabled={busyId === e.id}
+                onClick={() => handleActivate(e)}
+              >
+                הפעלה
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger"
+                disabled={busyId === e.id}
+                onClick={() => handleDeletePermanently(e)}
+              >
+                מחיקה לצמיתות
+              </button>
+            </>
           )}
         </div>
       ),

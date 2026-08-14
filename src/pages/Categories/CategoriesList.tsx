@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  activateCategory,
   deactivateCategory,
+  deleteCategoryPermanently,
   listCategories,
   topLevelOf,
   childrenOf,
@@ -81,6 +83,33 @@ export default function CategoriesList() {
     }
   }
 
+  async function handleActivate(category: Category) {
+    setBusyId(category.id);
+    setError(null);
+    try {
+      await activateCategory(category.id);
+      loadCategories();
+    } catch (err) {
+      setError(translateApiError(err));
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  async function handleDeletePermanently(category: Category) {
+    if (!window.confirm(`למחוק את ${category.name} לצמיתות? פעולה זו אינה הפיכה.`)) return;
+    setBusyId(category.id);
+    setError(null);
+    try {
+      await deleteCategoryPermanently(category.id);
+      loadCategories();
+    } catch (err) {
+      setError(translateApiError(err));
+    } finally {
+      setBusyId(null);
+    }
+  }
+
   function renderRow(category: Category, isChild: boolean) {
     return (
       <div key={category.id} className={`${styles.row} ${isChild ? styles.rowChild : ''}`}>
@@ -118,7 +147,7 @@ export default function CategoriesList() {
           >
             עריכה
           </button>
-          {category.active && (
+          {category.active ? (
             <button
               type="button"
               className="btn btn-danger"
@@ -127,6 +156,25 @@ export default function CategoriesList() {
             >
               השבתה
             </button>
+          ) : (
+            <>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                disabled={busyId === category.id}
+                onClick={() => handleActivate(category)}
+              >
+                הפעלה
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger"
+                disabled={busyId === category.id}
+                onClick={() => handleDeletePermanently(category)}
+              >
+                מחיקה לצמיתות
+              </button>
+            </>
           )}
         </div>
       </div>

@@ -64,6 +64,8 @@ const PATTERN_MESSAGES: [RegExp, string][] = [
   [/must be between/, 'הערך שהוזן אינו בטווח המותר'],
   [/must be a decimal number/, 'יש להזין מספר תקין'],
   [/does not match|belongs to a different/, 'הבחירה אינה תואמת את שאר הנתונים בטופס'],
+  [/is still active — deactivate before deleting permanently/, 'יש להשבית לפני מחיקה לצמיתות'],
+  [/Cannot permanently delete/, 'לא ניתן למחוק לצמיתות — קיימת היסטוריה מקושרת (עסקאות, ספקים או תת-קטגוריות). ניתן להשבית בלבד'],
 ];
 
 const GENERIC_FALLBACK = 'אירעה שגיאה. נסו שוב, ואם הבעיה חוזרת פנו לתמיכה.';

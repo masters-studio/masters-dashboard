@@ -73,3 +73,14 @@ export function updateSupplier(id: number, request: SupplierRequest): Promise<Su
 export function deactivateSupplier(id: number): Promise<void> {
   return apiFetch<void>(`/suppliers/${id}`, { method: 'DELETE' });
 }
+
+/** Reverses deactivateSupplier — sets active=true. */
+export function activateSupplier(id: number): Promise<void> {
+  return apiFetch<void>(`/suppliers/${id}/activate`, { method: 'POST' });
+}
+
+/** A genuine, irreversible delete — only succeeds if already inactive and
+ *  nothing references this supplier (see SupplierService#deletePermanently). */
+export function deleteSupplierPermanently(id: number): Promise<void> {
+  return apiFetch<void>(`/suppliers/${id}/permanent`, { method: 'DELETE' });
+}

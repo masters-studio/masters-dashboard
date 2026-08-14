@@ -300,15 +300,6 @@ export default function SupplierForm() {
               </select>
             </label>
 
-            <label className={`${styles.field} ${styles.checkboxField}`}>
-              <input
-                type="checkbox"
-                checked={form.active}
-                onChange={(e) => set('active', e.target.checked)}
-              />
-              ספק פעיל
-            </label>
-
             <label className={`${styles.field} ${styles.fieldFull}`}>
               הערות
               <textarea rows={3} value={form.notes} onChange={(e) => set('notes', e.target.value)} />

@@ -269,14 +269,6 @@ export default function CategoryForm() {
               דורש שיוך עובד
             </label>
 
-            <label className={`${styles.field} ${styles.checkboxField}`}>
-              <input
-                type="checkbox"
-                checked={form.active}
-                onChange={(e) => set('active', e.target.checked)}
-              />
-              קטגוריה פעילה
-            </label>
           </div>
 
           <div className={styles.formActions}>

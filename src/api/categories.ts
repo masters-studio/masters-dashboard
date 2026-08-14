@@ -81,3 +81,14 @@ export function updateCategory(id: number, request: CategoryRequest): Promise<Ca
 export function deactivateCategory(id: number): Promise<void> {
   return apiFetch<void>(`/categories/${id}`, { method: 'DELETE' });
 }
+
+/** Reverses deactivateCategory — sets active=true. */
+export function activateCategory(id: number): Promise<void> {
+  return apiFetch<void>(`/categories/${id}/activate`, { method: 'POST' });
+}
+
+/** A genuine, irreversible delete — only succeeds if already inactive and
+ *  nothing references this category (see CategoryService#deletePermanently). */
+export function deleteCategoryPermanently(id: number): Promise<void> {
+  return apiFetch<void>(`/categories/${id}/permanent`, { method: 'DELETE' });
+}

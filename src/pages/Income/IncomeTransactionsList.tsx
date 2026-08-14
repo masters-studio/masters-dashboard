@@ -180,9 +180,6 @@ export default function IncomeTransactionsList() {
               })
             }
           />
-          <button type="button" className="btn btn-ghost" onClick={() => navigate('/income/quick-entry')}>
-            הזנה מהירה
-          </button>
           <button type="button" className="btn btn-primary" onClick={() => navigate('/income/new')}>
             עסקת הכנסה חדשה
           </button>

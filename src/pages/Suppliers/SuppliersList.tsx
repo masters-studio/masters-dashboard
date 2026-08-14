@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  activateSupplier,
   deactivateSupplier,
+  deleteSupplierPermanently,
   listSuppliers,
   type Supplier,
   type SupplierListFilters,
@@ -98,6 +100,33 @@ export default function SuppliersList() {
     }
   }
 
+  async function handleActivate(supplier: Supplier) {
+    setBusyId(supplier.id);
+    setError(null);
+    try {
+      await activateSupplier(supplier.id);
+      loadSuppliers();
+    } catch (err) {
+      setError(translateApiError(err));
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  async function handleDeletePermanently(supplier: Supplier) {
+    if (!window.confirm(`למחוק את ${supplier.name} לצמיתות? פעולה זו אינה הפיכה.`)) return;
+    setBusyId(supplier.id);
+    setError(null);
+    try {
+      await deleteSupplierPermanently(supplier.id);
+      loadSuppliers();
+    } catch (err) {
+      setError(translateApiError(err));
+    } finally {
+      setBusyId(null);
+    }
+  }
+
   const columns: Column<Supplier>[] = [
     { header: 'קוד', render: (s) => s.supplierCode ?? '—', width: '90px' },
     { header: 'שם', render: (s) => s.name },
@@ -118,7 +147,7 @@ export default function SuppliersList() {
       header: '',
       render: (s) => (
         <div className={styles.actionCell} onClick={(evt) => evt.stopPropagation()}>
-          {s.active && (
+          {s.active ? (
             <button
               type="button"
               className="btn btn-danger"
@@ -127,6 +156,25 @@ export default function SuppliersList() {
             >
               השבתה
             </button>
+          ) : (
+            <>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                disabled={busyId === s.id}
+                onClick={() => handleActivate(s)}
+              >
+                הפעלה
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger"
+                disabled={busyId === s.id}
+                onClick={() => handleDeletePermanently(s)}
+              >
+                מחיקה לצמיתות
+              </button>
+            </>
           )}
         </div>
       ),

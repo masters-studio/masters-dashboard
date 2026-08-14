@@ -6,14 +6,16 @@ import {
   listCompensationModels,
   listEmployeeTypes,
   listProfitCenters,
+  listServices,
   listSettlementTypes,
   type CalculationBasisLookup,
   type CompensationModelLookup,
   type EmployeeTypeLookup,
+  type ServiceLookup,
   type SimpleLookup,
 } from '../../api/lookups';
+import { listEmployeeServicePrices, setEmployeeServicePrice } from '../../api/employeeServicePrices';
 import { translateApiError } from '../../api/errorMessages';
-import EmployeeServicePricesEditor from './EmployeeServicePricesEditor';
 import styles from '../../styles/domainScreen.module.css';
 
 interface FormState {
@@ -71,8 +73,13 @@ export default function EmployeeForm() {
   const [compensationModels, setCompensationModels] = useState<CompensationModelLookup[]>([]);
   const [calculationBases, setCalculationBases] = useState<CalculationBasisLookup[]>([]);
   const [settlementTypes, setSettlementTypes] = useState<SimpleLookup[]>([]);
+  const [services, setServices] = useState<ServiceLookup[]>([]);
 
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
+  // Keyed by serviceId, string values for controlled inputs — see
+  // "מחירון שירותים" fields below. Populated from the employee's existing
+  // price list in edit mode; blank means "no price set for this service".
+  const [servicePrices, setServicePrices] = useState<Record<number, string>>({});
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [pageError, setPageError] = useState<string | null>(null);
   const [loading, setLoading] = useState(isEdit);
@@ -85,13 +92,15 @@ export default function EmployeeForm() {
       listCompensationModels(),
       listCalculationBases(),
       listSettlementTypes(),
+      listServices(),
     ])
-      .then(([types, centers, models, bases, settlements]) => {
+      .then(([types, centers, models, bases, settlements, svcs]) => {
         setEmployeeTypes(types);
         setProfitCenters(centers);
         setCompensationModels(models);
         setCalculationBases(bases);
         setSettlementTypes(settlements);
+        setServices(svcs);
       })
       .catch((err) => setPageError(translateApiError(err)));
   }, []);
@@ -99,8 +108,8 @@ export default function EmployeeForm() {
   useEffect(() => {
     if (!isEdit) return;
     setLoading(true);
-    getEmployee(Number(id))
-      .then((employee) => {
+    Promise.all([getEmployee(Number(id)), listEmployeeServicePrices(Number(id))])
+      .then(([employee, prices]) => {
         setForm({
           employeeCode: employee.employeeCode ?? '',
           name: employee.name,
@@ -120,6 +129,7 @@ export default function EmployeeForm() {
           active: employee.active,
           notes: employee.notes ?? '',
         });
+        setServicePrices(Object.fromEntries(prices.map((p) => [p.serviceId, String(p.price)])));
       })
       .catch((err) => setPageError(translateApiError(err)))
       .finally(() => setLoading(false));
@@ -138,11 +148,17 @@ export default function EmployeeForm() {
   );
   // The service price list only makes sense for מספרה — services/prices are
   // barber-service specific, and don't exist as a concept for the other
-  // profit centres.
-  const showServicePrices = isEdit && selectedProfitCenter?.name === 'מספרה';
+  // profit centres. Shown on create too (not just edit): the price list is
+  // instrumental to setting up a new barber, not an afterthought — prices
+  // are saved right after the employee itself, in the same submit.
+  const showServicePrices = selectedProfitCenter?.name === 'מספרה';
 
   function set<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((f) => ({ ...f, [key]: value }));
+  }
+
+  function setServicePrice(serviceId: number, value: string) {
+    setServicePrices((p) => ({ ...p, [serviceId]: value }));
   }
 
   function validate(): Partial<Record<keyof FormState, string>> {
@@ -181,12 +197,35 @@ export default function EmployeeForm() {
     return errors;
   }
 
+  /** Service prices are optional (blank = "not set yet"), but a value that
+   *  IS entered must be a valid positive amount — same rule
+   *  EmployeeServicePricesEditor enforced before this replaced it. */
+  function validateServicePrices(): string | null {
+    for (const service of services) {
+      const raw = servicePrices[service.id];
+      if (!raw) continue;
+      const amount = Number(raw);
+      if (Number.isNaN(amount) || amount <= 0) {
+        return `מחיר "${service.name}" חייב להיות מספר תקין גדול מ-0`;
+      }
+    }
+    return null;
+  }
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setPageError(null);
     const errors = validate();
     setFieldErrors(errors);
     if (Object.keys(errors).length > 0) return;
+
+    if (showServicePrices) {
+      const priceError = validateServicePrices();
+      if (priceError) {
+        setPageError(priceError);
+        return;
+      }
+    }
 
     const request: EmployeeRequest = {
       employeeCode: form.employeeCode.trim() || null,
@@ -205,11 +244,23 @@ export default function EmployeeForm() {
 
     setSubmitting(true);
     try {
+      const employeeId = isEdit ? Number(id) : (await createEmployee(request)).id;
       if (isEdit) {
-        await updateEmployee(Number(id), request);
-      } else {
-        await createEmployee(request);
+        await updateEmployee(employeeId, request);
       }
+
+      // Prices save after the employee itself exists (an employeeId is
+      // required — see EmployeeServicePricesEditor's old javadoc for why
+      // this used to be edit-only). Only the ones actually filled in are
+      // sent; a blank field just leaves that service's price untouched.
+      if (showServicePrices) {
+        await Promise.all(
+          services
+            .filter((s) => servicePrices[s.id])
+            .map((s) => setEmployeeServicePrice(employeeId, s.id, Number(servicePrices[s.id]))),
+        );
+      }
+
       navigate('/employees');
     } catch (err) {
       setPageError(translateApiError(err));
@@ -405,14 +456,29 @@ export default function EmployeeForm() {
               </label>
             )}
 
-            <label className={`${styles.field} ${styles.checkboxField}`}>
-              <input
-                type="checkbox"
-                checked={form.active}
-                onChange={(e) => set('active', e.target.checked)}
-              />
-              עובד/ת פעיל/ה
-            </label>
+            {showServicePrices && (
+              <div className={`${styles.field} ${styles.fieldFull}`}>
+                <span>מחירון שירותים</span>
+                <p className={styles.hint}>
+                  המחיר שהלקוח משלם. אופציונלי — ניתן להשלים מאוחר יותר. שינוי מחיר משפיע רק על
+                  עסקאות חדשות מכאן ואילך.
+                </p>
+                <div className={styles.formGrid}>
+                  {services.map((service) => (
+                    <label key={service.id} className={styles.field}>
+                      מחיר {service.name} (₪)
+                      <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={servicePrices[service.id] ?? ''}
+                        onChange={(e) => setServicePrice(service.id, e.target.value)}
+                      />
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <label className={`${styles.field} ${styles.fieldFull}`}>
               הערות
@@ -431,8 +497,6 @@ export default function EmployeeForm() {
           </div>
         </form>
       </div>
-
-      {showServicePrices && <EmployeeServicePricesEditor employeeId={Number(id)} />}
     </div>
   );
 }
