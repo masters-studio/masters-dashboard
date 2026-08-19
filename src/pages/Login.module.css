@@ -26,9 +26,10 @@
 }
 
 .logo {
+  display: block;
   height: 32px;
   width: auto;
-  margin-bottom: 24px;
+  margin: 0 auto 24px;
 }
 
 .card h1 {
