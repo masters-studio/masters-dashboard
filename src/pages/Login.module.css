@@ -4,6 +4,15 @@
   align-items: center;
   justify-content: center;
   padding: 24px;
+  /* Login-only brand moment: the diagonal "MASTERS." wordmark pattern,
+     kept off every other screen so it never competes with dense tables.
+     Scrim is heavier than the sitewide texture (theme.css body) since this
+     art is busier and sits directly behind the form. */
+  background-color: var(--black);
+  background-image: linear-gradient(180deg, rgba(12, 12, 12, 0.62), rgba(12, 12, 12, 0.8)), url('/bg-login.jpg');
+  background-repeat: no-repeat, no-repeat;
+  background-position: center, center;
+  background-size: cover, cover;
 }
 
 .card {

@@ -54,7 +54,15 @@ html {
 body {
   margin: 0;
   font-family: var(--ff-body);
-  background: var(--black);
+  /* Brand background: a dark scrim over the official Texture1 concrete
+     texture, so panels/tables on top stay legible. --black is the fallback
+     while the image loads (and if it 404s). The login screen overrides this
+     with its own diagonal-wordmark background — see Login.module.css. */
+  background-color: var(--black);
+  background-image: linear-gradient(180deg, rgba(15, 15, 15, 0.45), rgba(15, 15, 15, 0.62)), url('/bg-texture.jpg');
+  background-repeat: no-repeat, no-repeat;
+  background-position: center, center;
+  background-size: cover, cover;
   color: var(--pearl);
   line-height: 1.65;
   font-size: 16px;
